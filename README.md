@@ -1,0 +1,1 @@
+A port of the bbcode parser and trasnformer [bbob](https://github.com/JiLiZART/bbob) in dart.
