@@ -1,7 +1,6 @@
 ## bbob_dart
 
-⚡️Blazing fast port of the bbcode parser and transformer [bbob](https://github.com/JiLiZART/bbob) in dart, 
-no production dependencies.
+⚡️Blazing fast port of the bbcode parser and transformer [bbob](https://github.com/JiLiZART/bbob) in dart.
 
 ### What's currently ported?
 
