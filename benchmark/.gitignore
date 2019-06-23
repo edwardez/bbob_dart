@@ -2,5 +2,4 @@
 !.gitignore
 !*.dart
 !*.txt
-!pubspec.yaml
 !README.md
