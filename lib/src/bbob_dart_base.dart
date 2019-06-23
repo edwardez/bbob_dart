@@ -1,6 +1,5 @@
-// TODO: Put public facing types in this file.
+library bbob_dart;
 
-/// Checks if you are awesome. Spoiler: you are.
-class Awesome {
-  bool get isAwesome => true;
-}
+export 'bbob_parser/error_message.dart';
+export 'bbob_parser/parse.dart';
+export 'bbob_plugin_helper/ast.dart';

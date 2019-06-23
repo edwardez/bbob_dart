@@ -1,0 +1,7 @@
+name: benchmark
+
+environment:
+
+dependencies:
+  bbob_dart:
+    path: ..

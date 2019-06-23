@@ -1,0 +1,7 @@
+name: example
+
+environment:
+
+dependencies:
+  bbob_dart:
+    path: ..

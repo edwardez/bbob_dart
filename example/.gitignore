@@ -1,0 +1,5 @@
+*
+!.gitignore
+!*.dart
+!pubspec.yaml
+!README.md
