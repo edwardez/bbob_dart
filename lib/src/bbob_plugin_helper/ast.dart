@@ -1,5 +1,11 @@
 /// Base class for any AST item.
+///
+/// This ast structure is based on bbob ast structure with dart-markdown
+/// https://github.com/dart-lang/markdown/blob/master/lib/src/ast.dart
+/// like structure.
 abstract class Node {
+  void accept(NodeVisitor visitor);
+
   String get textContent;
 }
 
@@ -21,6 +27,11 @@ class Element implements Node {
   ])  : this.children = [...children],
         attributes = attributes ?? {};
 
+  @override
+  String get textContent => children.map((child) => child.textContent).join('');
+
+  bool get isChildrenNullOrEmpty => children == null || children.isEmpty;
+
   /// Update attributes with [name] and [value] if both are not null.
   /// Returns [attributes] value by querying [name] even if [attributes]
   /// is not updated.
@@ -33,8 +44,19 @@ class Element implements Node {
   }
 
   /// Appends a new [child] to [children].
-  appendChild(Node child) {
+  void appendChild(Node child) {
     return children.add(child);
+  }
+
+  void accept(NodeVisitor visitor) {
+    if (visitor.visitElementBefore(this)) {
+      if (!isChildrenNullOrEmpty) {
+        for (var child in children) {
+          child.accept(visitor);
+        }
+      }
+      visitor.visitElementAfter(this);
+    }
   }
 
   @override
@@ -42,9 +64,6 @@ class Element implements Node {
     return 'Element{tag: \'$tag\', attributes: \'$attributes\','
         ' children: $children}';
   }
-
-  @override
-  String get textContent => children.map((child) => child.textContent).join('');
 }
 
 /// A plain text element.
@@ -55,8 +74,30 @@ class Text implements Node {
 
   String get textContent => text;
 
+  void accept(NodeVisitor visitor) => visitor.visitText(this);
+
   @override
   String toString() {
     return 'Text{text: \'$text\'}';
   }
+}
+
+/// Visitor pattern for the AST.
+///
+/// Renderers or other AST transformers should implement this.
+abstract class NodeVisitor {
+  /// Called when a Text node has been reached.
+  void visitText(Text text);
+
+  /// Called when an Element has been reached, before its children have been
+  /// visited.
+  ///
+  /// Returns `false` to skip its children.
+  bool visitElementBefore(Element element);
+
+  /// Called when an Element has been reached, after its children have been
+  /// visited.
+  ///
+  /// Will not be called if [visitElementBefore] returns `false`.
+  void visitElementAfter(Element element);
 }
