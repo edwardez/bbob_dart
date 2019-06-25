@@ -13,7 +13,7 @@ final expected = parse(input);
 /// https://github.com/dart-lang/markdown/blob/master/benchmark/benchmark.dart
 void main() {
   var best = double.infinity;
-  double worst;
+  var worst = double.negativeInfinity;
 
   // Run the benchmark several times. This ensures the VM is warmed up and lets
   // us see how much variance there is.
@@ -29,13 +29,9 @@ void main() {
 
     var elapsed = stopwatch.elapsedMilliseconds / runsPerTrial;
 
-    // Keep track of the best run so far.
+    // Keep track of the best/worst run so far.
     if (elapsed >= best) {
-      if (worst == null) {
-        worst = elapsed;
-      } else {
-        worst = math.max(worst, elapsed);
-      }
+      worst = math.max(worst, elapsed);
       continue;
     }
     best = elapsed;
