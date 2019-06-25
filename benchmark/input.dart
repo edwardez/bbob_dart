@@ -1,3 +1,4 @@
+const input = '''
 [b]bolded text[/b]
 [i]italicized text[/i]
 [u]underlined text[/u]
@@ -204,4 +205,4 @@ render(<App />) // <span><span style="font-weight: bold;">Super <span style="fon
 [url=https://en.wikipedia.org]English Wikipedia[/url]
 [url=https://en.wikipedia.org]English Wikipedia[/url]
 [url=https://en.wikipedia.org]English Wikipedia[/url]
-
+''';
