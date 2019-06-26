@@ -1,5 +1,7 @@
 ## bbob_dart
 
+![badge](https://img.shields.io/pub/v/bbob_dart.svg)
+
 ⚡️Blazing fast port of the BBCode parser and transformer [bbob](https://github.com/JiLiZART/bbob) in dart.
 
 ### What's currently ported?
