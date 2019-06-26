@@ -41,7 +41,7 @@ class Parser {
   /// bbcode open tag).
   final String openTag;
 
-  /// Open tag of the bbcode, default to [closeSquareBracket] (the typical
+  /// Close tag of the bbcode, default to [closeSquareBracket] (the typical
   /// bbcode open tag).
   final String closeTag;
 

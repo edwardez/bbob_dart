@@ -33,10 +33,10 @@ class Lexer {
   /// The input String.
   final String _buffer;
 
-  /// Open tag of the bbcode, default to [openSquareBracket] (the typical bbcode open tag)
+  /// Open tag, default to [openSquareBracket] (the typical bbcode open tag)
   final String _openTag;
 
-  /// Open tag of the bbcode, default to [closeSquareBracket] (the typical bbcode open tag)
+  /// Close tag, default to [closeSquareBracket] (the typical bbcode open tag)
   final String _closeTag;
 
   /// Whether tags can be escaped,
