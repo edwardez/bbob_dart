@@ -1,6 +1,6 @@
 ## bbob_dart
 
-![badge](https://img.shields.io/pub/v/bbob_dart.svg)
+<a href="https://pub.dev/packages/bbob_dart" rel="pub link">![badge](https://img.shields.io/pub/v/bbob_dart.svg)</a>
 
 ⚡️Blazing fast port of the BBCode parser and transformer [bbob](https://github.com/JiLiZART/bbob) in dart.
 
