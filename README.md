@@ -8,6 +8,9 @@
 
 * `bbob_parser` :  parses bbcode into a ast.
 
+### Usage
+See code in [exmaple](https://github.com/edwardez/bbob_dart/tree/master/example) folder.
+
 ### What's different from the original bbob?
 `bbob_dart` is written in dart, which has a sound type system. And with the help of dart,
 `bbob_dart` is strongly typed.
@@ -25,9 +28,6 @@ if you have a well-tested implementation.
 
 ### How fast it is?
 See discussions [here](https://github.com/JiLiZART/bbob/issues/25). Performance is expected to be on par with original `bbob`.
-
-### Usage
-See code in [exmaple](https://github.com/edwardez/bbob_dart/tree/master/example) folder.
 
 ### Feature requests & bugs
 Since this is a port of [bbob](https://github.com/JiLiZART/bbob), feature requests and bug 
