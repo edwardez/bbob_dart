@@ -23,7 +23,7 @@ renders ast into html.
 2. Similar to https://github.com/dart-lang/markdown/blob/master/lib/src/html_renderer.dart,
 `bbob_dart` has implemented an ast which allows you to walk through the tree using visitor pattern.
 
-Office support in `bbob_dart` for a html renderer  might not happen in the near future. Feel free to send a pull request 
+Official support in `bbob_dart` for a html renderer  might not happen in the near future. Feel free to send a pull request 
 if you have a well-tested implementation. 
 
 ### How fast it is?
