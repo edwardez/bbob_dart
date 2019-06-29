@@ -22,9 +22,6 @@ class CharGrabber {
   /// Whether [CharGrabber] is at the end of [_source].
   bool get isLast => _index == _source.length - 1;
 
-  /// Returns rest of the [_source] starting from current position.
-  String get rest => _source.substring(_index);
-
   /// Gets character that's at the current scan [_index].
   String get current => _index >= _source.length ? null : _source[_index];
 
@@ -49,11 +46,10 @@ class CharGrabber {
 
   /// Grabs rest of string until [CharGrabber] finds [char].
   String substringUntil(String char) {
-    final rest = this.rest;
-    final indexOfChar = rest.indexOf(char);
+    final indexOfChar = _source.indexOf(char, _index);
 
     if (indexOfChar >= 0) {
-      return rest.substring(0, indexOfChar);
+      return _source.substring(_index, indexOfChar);
     }
 
     return '';
