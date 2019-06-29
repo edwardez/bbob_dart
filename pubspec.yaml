@@ -1,6 +1,6 @@
 name: bbob_dart
 description: A port of the bbcode parser and trasnformer [bbob](https://github.com/JiLiZART/bbob) in dart.
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/edwardez/bbob_dart
 author: Edward Zhang <bangumin@protonmail.com>
 

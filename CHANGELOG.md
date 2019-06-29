@@ -1,3 +1,8 @@
+## 0.1.1
+Improve performance so it's on par with original bbob implementation.
+
+Some other minor fixes.
+
 ## 0.1.0
 
 Initial release.
