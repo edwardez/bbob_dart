@@ -9,7 +9,7 @@
 * `bbob_parser` :  parses bbcode into a ast.
 
 ### Usage
-See code in [exmaple](/example) folder.
+See code in [exmaple](https://github.com/edwardez/bbob_dart/tree/master/example) folder.
 
 ### Feature requests & bugs
 Since this is a port of [bbob](https://github.com/JiLiZART/bbob), feature requests and bug 
