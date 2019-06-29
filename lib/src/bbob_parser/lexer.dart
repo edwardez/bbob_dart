@@ -36,7 +36,7 @@ class Lexer {
   /// Open tag, default to [openSquareBracket] (the typical bbcode open tag)
   final String _openTag;
 
-  /// Close tag, default to [closeSquareBracket] (the typical bbcode open tag)
+  /// Close tag, default to [closeSquareBracket] (the typical bbcode close tag)
   final String _closeTag;
 
   /// Whether tags can be escaped,

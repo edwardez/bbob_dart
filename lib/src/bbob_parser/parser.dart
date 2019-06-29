@@ -42,7 +42,7 @@ class Parser {
   final String openTag;
 
   /// Close tag of the bbcode, default to [closeSquareBracket] (the typical
-  /// bbcode open tag).
+  /// bbcode close tag).
   final String closeTag;
 
   /// Whether tags can be escaped. See [Lexer._enableEscapeTags] for a detailed
