@@ -8,6 +8,24 @@
 
 * `bbob_parser` :  parses bbcode into a ast.
 
+### What's different from the original bbob?
+`bbob_dart` is written in dart, which has a sound type system. And with the help of dart,
+`bbob_dart` is strongly typed.
+  
+### I want to render ast into html/markdown...
+You have two ways to render:
+1. Similar to https://github.com/JiLiZART/bbob/blob/master/packages/bbob-html/src/index.js, how `bbob` 
+renders ast into html.
+
+2. Similar to https://github.com/dart-lang/markdown/blob/master/lib/src/html_renderer.dart,
+`bbob_dart` has implemented an ast which allows you to walk through the tree using visitor pattern.
+
+Office support in `bbob_dart` for a html renderer  might not happen in the near future. Feel free to send a pull request 
+if you have a well-tested implementation. 
+
+### How fast it is?
+See discussions [here](https://github.com/JiLiZART/bbob/issues/25). Performance is expected to be on par with original `bbob`.
+
 ### Usage
 See code in [exmaple](https://github.com/edwardez/bbob_dart/tree/master/example) folder.
 
