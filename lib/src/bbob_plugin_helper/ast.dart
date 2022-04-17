@@ -22,25 +22,22 @@ class Element implements Node {
 
   Element(
     this.tag, [
-    Map<String, String> attributes,
+    Map<String, String> attributes = const {},
     List<Node> children = const [],
-  ])  : this.children = [...children],
-        attributes = attributes ?? {};
+  ])  : children = [...children],
+        attributes = attributes;
 
   @override
   String get textContent => children.map((child) => child.textContent).join('');
 
-  bool get isChildrenNullOrEmpty => children == null || children.isEmpty;
+  bool get isChildrenNullOrEmpty => children.isEmpty;
 
   /// Update attributes with [name] and [value] if both are not null.
   /// Returns [attributes] value by querying [name] even if [attributes]
   /// is not updated.
   String updateAttributes(String name, String value) {
-    if (name != null && value != null) {
-      attributes[name] = value;
-    }
-
-    return attributes[name];
+    attributes[name] = value;
+    return attributes[name]!;
   }
 
   /// Appends a new [child] to [children].
@@ -48,6 +45,7 @@ class Element implements Node {
     return children.add(child);
   }
 
+  @override
   void accept(NodeVisitor visitor) {
     if (visitor.visitElementBefore(this)) {
       if (!isChildrenNullOrEmpty) {
@@ -72,8 +70,10 @@ class Text implements Node {
 
   Text(this.text);
 
+  @override
   String get textContent => text;
 
+  @override
   void accept(NodeVisitor visitor) => visitor.visitText(this);
 
   @override
