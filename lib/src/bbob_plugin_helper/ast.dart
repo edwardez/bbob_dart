@@ -22,10 +22,10 @@ class Element implements Node {
 
   Element(
     this.tag, [
-    Map<String, String> attributes = const {},
+    Map<String, String>? attributes,
     List<Node> children = const [],
   ])  : children = [...children],
-        attributes = attributes;
+        attributes = attributes ?? {};
 
   @override
   String get textContent => children.map((child) => child.textContent).join('');
