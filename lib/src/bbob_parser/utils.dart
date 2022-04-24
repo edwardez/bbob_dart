@@ -7,7 +7,7 @@ import 'package:bbob_dart/src/bbob_plugin_helper/char.dart';
 class CharGrabber {
   /// Callback function that will be executed every time [CharGrabber] skips a
   /// character.
-  final Function() onSkip;
+  final Function()? onSkip;
 
   final String _source;
 
@@ -23,18 +23,18 @@ class CharGrabber {
   bool get isLast => _index == _source.length - 1;
 
   /// Gets character that's at the current scan [_index].
-  String get current => _index >= _source.length ? null : _source[_index];
+  String? get current => _index >= _source.length ? null : _source[_index];
 
   /// Gets character that's at the next scan [_index]. Returns null if [_index] is the
   /// last character of [_source].
-  String get next => _index >= _source.length - 1 ? null : _source[_index + 1];
+  String? get next => _index >= _source.length - 1 ? null : _source[_index + 1];
 
   /// Gets previous character that's at the previous scan [_index]. Returns
   /// null if `_index<=0`
-  String get previous => _index <= 0 ? null : _source[_index - 1];
+  String? get previous => _index <= 0 ? null : _source[_index - 1];
 
   /// Grabs next character as long as [test] is evaluated to true.
-  String grabWhile(bool test(String str)) {
+  String grabWhile(bool Function(String? str) test) {
     final start = _index;
 
     while (hasNext && test(current)) {
@@ -60,18 +60,18 @@ class CharGrabber {
     _index++;
 
     if (onSkip != null) {
-      onSkip();
+      onSkip!();
     }
   }
 }
 
-E lastOrNull<E>(Iterable<E> items) {
+E? lastOrNull<E>(Iterable<E> items) {
   return items.isNotEmpty ? items.last : null;
 }
 
 /// Removes and returns last item if [_nodes] is not empty, otherwise returns
 /// null.
-E removePossibleLast<E>(List<E> items) {
+E? removePossibleLast<E>(List<E> items) {
   if (items.isNotEmpty) {
     return items.removeLast();
   }

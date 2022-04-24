@@ -21,7 +21,7 @@ class Token {
     String value, [
     int line = 0,
     int column = 0,
-  ])  : this.type = type,
+  ])  : type = type,
         value = value,
         linePosition = line,
         columnPosition = column;

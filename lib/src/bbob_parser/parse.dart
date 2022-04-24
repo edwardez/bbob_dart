@@ -7,11 +7,11 @@ import 'package:bbob_dart/src/bbob_plugin_helper/char.dart';
 /// See constructor of [Parser] for explanations of each field.
 List<Node> parse(
   String input, {
-  Function(ParseErrorMessage message) onError,
+  Function(ParseErrorMessage message)? onError,
   String openTag = openSquareBracket,
   String closeTag = closeSquareBracket,
   bool enableEscapeTags = false,
-  Set<String> validTags,
+  Set<String>? validTags,
 }) {
   final parser = Parser(
     onError: onError,

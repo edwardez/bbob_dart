@@ -2,7 +2,6 @@
 import 'package:bbob_dart/src/bbob_parser/token.dart';
 import 'package:bbob_dart/src/bbob_parser/utils.dart';
 import 'package:bbob_dart/src/bbob_plugin_helper/char.dart';
-import 'package:meta/meta.dart';
 
 /// A lexer implementation that parses input into a list of [Token].
 ///
@@ -50,7 +49,7 @@ class Lexer {
 
   final Set<String> _nonCharTokens;
 
-  final Function(Token token) onToken;
+  final Function(Token token)? onToken;
 
   /// Current line position number.
   int _linePosition = 0;
@@ -61,7 +60,7 @@ class Lexer {
   /// Current token index in [_tokens].
   int _tokenIndex = -1;
 
-  CharGrabber _bufferGrabber;
+  late CharGrabber _bufferGrabber;
 
   onSkipBufferGrabber() {
     _columnPosition++;
@@ -69,11 +68,11 @@ class Lexer {
 
   Lexer._(
     this._buffer, {
-    this.onToken,
+    required this.onToken,
     String openTag = openSquareBracket,
     String closeTag = closeSquareBracket,
     bool enableEscapeTags = false,
-  })  : _tokens = List()..length = _buffer.length.floor(),
+  })  : _tokens = [],
         _openTag = openTag,
         _closeTag = closeTag,
         _enableEscapeTags = enableEscapeTags,
@@ -87,7 +86,7 @@ class Lexer {
   /// Creates a new [Lexer].
   factory Lexer.create(
     String buffer, {
-    Function onToken,
+    Function(Token)? onToken,
     String openTag = openSquareBracket,
     String closeTag = closeSquareBracket,
     bool enableEscapeTags = false,
@@ -104,42 +103,38 @@ class Lexer {
       lexer._columnPosition++;
     });
 
-    assert(buffer != null);
-    assert(openTag != null);
-    assert(closeTag != null);
-    assert(enableEscapeTags != null);
 
     return lexer;
   }
 
-  bool _isReservedChar(String char) => _reservedChars.contains(char);
+  bool _isReservedChar(String? char) => char != null && _reservedChars.contains(char);
 
-  bool _isWhiteSpace(String char) => _whiteSpaces.contains(char);
+  bool _isWhiteSpace(String? char) => char != null && _whiteSpaces.contains(char);
 
-  bool _isTokenChar(String char) => !_nonCharTokens.contains(char);
+  bool _isTokenChar(String? char) => char != null && !_nonCharTokens.contains(char);
 
   bool _isSpecialChar(String char) => _spacialChars.contains(char);
 
   /// Emits newly created token to subscriber
   void _emitToken(Token token) {
     if (onToken != null) {
-      onToken(token);
+      onToken!(token);
     }
 
     _tokenIndex++;
 
-    _tokens[_tokenIndex] = token;
+    _tokens.add(token);
   }
 
   /// Parses params inside [myTag---params goes here---]content[/myTag]
   Attribute _parseAttrs(str) {
-    String tagName;
+    String? tagName;
     bool skipSpecialChars = false;
 
     final attrTokens = <Token>[];
     final attrCharGrabber = CharGrabber(str);
 
-    validAttr(char) {
+    bool validAttr(char) {
       final isEqual = char == equal;
       final isWhiteSpace = _isWhiteSpace(char);
       final nextChar = attrCharGrabber.next;
@@ -165,7 +160,7 @@ class Lexer {
       return !isEqual && !isWhiteSpace;
     }
 
-    _nextAttr() {
+    void _nextAttr() {
       final attrStr = attrCharGrabber.grabWhile(validAttr);
       final currChar = attrCharGrabber.current;
 
@@ -191,7 +186,7 @@ class Lexer {
     }
 
     return Attribute(
-      tag: tagName,
+      tag: tagName!,
       attrs: attrTokens,
     );
   }
@@ -204,7 +199,7 @@ class Lexer {
       _columnPosition = 0;
 
       _emitToken(
-          Token(TokenType.NewLine, currChar, _linePosition, _columnPosition));
+          Token(TokenType.NewLine, currChar!, _linePosition, _columnPosition));
 
       // Original bbob increase [linePosition] before [_emitToken]. It seems wrong
       // since new line is at the end of last line.
@@ -218,14 +213,14 @@ class Lexer {
       _bufferGrabber.skip(); // skip the \ without emitting anything
       _bufferGrabber.skip(); // skip past the [ or ] as well
       _emitToken(
-          Token(TokenType.Word, nextChar, _linePosition, _columnPosition));
+          Token(TokenType.Word, nextChar!, _linePosition, _columnPosition));
     } else if (_enableEscapeTags &&
         currChar == backslash &&
         nextChar == backslash) {
       _bufferGrabber.skip(); // skip the first \ without emitting anything
       _bufferGrabber.skip(); // skip past the second \ and emit it
       _emitToken(
-          Token(TokenType.Word, nextChar, _linePosition, _columnPosition));
+          Token(TokenType.Word, nextChar!, _linePosition, _columnPosition));
     } else if (currChar == _openTag) {
       _bufferGrabber.skip(); // skip openTag
 
@@ -237,7 +232,7 @@ class Lexer {
           hasInvalidChars ||
           _bufferGrabber.isLast) {
         _emitToken(
-            Token(TokenType.Word, currChar, _linePosition, _columnPosition));
+            Token(TokenType.Word, currChar!, _linePosition, _columnPosition));
       } else {
         final str = _bufferGrabber.grabWhile((val) => val != _closeTag);
 
@@ -262,7 +257,7 @@ class Lexer {
       _bufferGrabber.skip(); // skip closeTag
 
       _emitToken(
-          Token(TokenType.Word, currChar, _linePosition, _columnPosition));
+          Token(TokenType.Word, currChar!, _linePosition, _columnPosition));
     } else if (_isTokenChar(currChar)) {
       final str = _bufferGrabber.grabWhile(_isTokenChar);
       _emitToken(Token(TokenType.Word, str, _linePosition, _columnPosition));
@@ -291,5 +286,5 @@ class Attribute {
   final String tag;
   final List<Token> attrs;
 
-  const Attribute({@required this.tag, @required this.attrs});
+  const Attribute({required this.tag, required this.attrs});
 }

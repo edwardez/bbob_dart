@@ -266,11 +266,14 @@ void main() {
           ],
         ];
 
-        for (var pairs in zip([inputs, outputs])) {
-          final tokens = tokenize(pairs[0]);
+        for (var i = 0; i < inputs.length; i++) {
+          var input = inputs[i];
+          var output = outputs[i];
+
+          final tokens = tokenize(input);
           validateTokens(
             tokens,
-            pairs[1],
+            output,
             skipColumnPositionChecking: true,
             skipLinePositionChecking: true,
           );

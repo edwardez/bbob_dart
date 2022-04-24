@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 
 class ParseErrorMessage {
   final String message;
@@ -7,10 +6,10 @@ class ParseErrorMessage {
   final int column;
 
   ParseErrorMessage({
-    @required this.message,
-    @required this.tagName,
-    @required this.lineNumber,
-    @required this.column,
+    required this.message,
+    required this.tagName,
+    required this.lineNumber,
+    required this.column,
   });
 
   @override

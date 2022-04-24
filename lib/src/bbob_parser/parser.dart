@@ -10,24 +10,24 @@ import 'package:bbob_dart/src/bbob_plugin_helper/char.dart';
 /// To use [Parser], initialize it then call [Parser.parse].
 class Parser {
   /// Result AST of nodes.
-  final _nodes = List<Node>();
+  final List<Node> _nodes = [];
 
   // If a new cache/buffer field is added, [_resetCache] needs to be updated.
 
   /// Temporary buffer of nodes that's nested to another node.
-  final _nestedElements = List<Element>();
+  final List<Element> _nestedElements = [];
 
   /// Temporary buffer of nodes [tag..]...[/tag].
-  final _tagNodeElements = List<Element>();
+  final List<Element> _tagNodeElements = [];
 
   /// Temporary buffer of tag attributes.
-  final _ElementsAttrName = List<String>();
+  final List<String> _ElementsAttrName = [];
 
   /// Cache for nested tags checks.
   final _nestedTagsMap = {};
 
   /// Function that'll be called if there is an error.
-  final Function(ParseErrorMessage message) onError;
+  final Function(ParseErrorMessage message)? onError;
 
   /// Tags that will be treated as valid during parsing. If [validTags] is not
   /// null and input contains a tag that's not in this list, that tag will be
@@ -35,7 +35,7 @@ class Parser {
   ///
   /// Default to null, a null [validTags] indicates that all tags will be treated
   /// as valid.
-  final Set<String> validTags;
+  final Set<String>? validTags;
 
   /// Open tag of the bbcode, default to [openSquareBracket] (the typical
   /// bbcode open tag).
@@ -51,15 +51,15 @@ class Parser {
 
   /// Underlying tokenizer that'll be initialized each time [Parser.parse] is
   /// called.
-  Lexer tokenizer;
+  late Lexer tokenizer;
 
   Parser({
     this.onError,
     this.openTag = openSquareBracket,
     this.closeTag = closeSquareBracket,
     this.enableEscapeTags = false,
-    Set<String> validTags,
-  }) : validTags = validTags?.toSet();
+    this.validTags,
+  });
 
   bool isTagNested(String tagName) => _nestedTagsMap.containsKey(tagName);
 
@@ -78,7 +78,7 @@ class Parser {
     }
   }
 
-  _appendNodes(Node node) {
+  void _appendNodes(Node node) {
     final lastNestedNode = lastOrNull(_nestedElements);
     if (lastNestedNode != null) {
       lastNestedNode.children.add(node);
@@ -114,13 +114,15 @@ class Parser {
       final row = token.linePosition;
       final column = token.columnPosition;
 
-      onError(ParseErrorMessage(
-        lineNumber: row,
-        tagName: tag,
-        message:
-            'Inconsistent tag "${tag}" on line ${row} and column ${column}',
-        column: column,
-      ));
+      if (onError != null) {
+        onError!(ParseErrorMessage(
+          lineNumber: row,
+          tagName: tag,
+          message:
+          'Inconsistent tag "${tag}" on line ${row} and column ${column}',
+          column: column,
+        ));
+      }
     }
   }
 
@@ -144,7 +146,10 @@ class Parser {
     if (lastElement != null) {
       if (token.isAttributeName) {
         _ElementsAttrName.add(tokenValue);
-        lastElement.updateAttributes(lastOrNull(_ElementsAttrName), '');
+        final last = lastOrNull(_ElementsAttrName);
+        if(last != null) {
+          lastElement.updateAttributes(last, '');
+        }
       } else if (token.isAttributeValue) {
         final attrName = lastOrNull(_ElementsAttrName);
 
@@ -173,7 +178,7 @@ class Parser {
   }
 
   /// Resets cached data.
-  _resetCache() {
+  void _resetCache() {
     _nodes.clear();
     _nestedElements.clear();
     _tagNodeElements.clear();
