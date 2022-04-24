@@ -428,7 +428,7 @@ void main() {
       test(
           'attributes with no space between them. No valid, but accepted by '
           'the browser', () {
-        const content = r'<button id="test2" class="value4" title="value5">'
+        const content = r'<button id="test2" class="value4"title="value5">'
             r'class="value4"title="value5"</button>';
         final tokens = tokenizeHtml(content);
 
