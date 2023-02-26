@@ -1,3 +1,7 @@
+## 0.2.1
+
+Stable null-safety release, no code change since 0.2.0-dev.1
+
 ## 0.2.0-dev.1
 
 Migrate to null-safety.
