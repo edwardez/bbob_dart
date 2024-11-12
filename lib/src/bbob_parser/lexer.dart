@@ -182,7 +182,7 @@ class Lexer {
            attrTokens.add(Token(
                TokenType.AttributeValue, escaped, _linePosition, _columnPosition));
          } else {
-           // Defo a name
+           // Definitely a name
            attrTokens.add(Token(
                TokenType.AttributeName, name, _linePosition, _columnPosition));
          }
