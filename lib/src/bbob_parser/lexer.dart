@@ -163,7 +163,9 @@ class Lexer {
       return !isWhiteSpace;
     }
 
-    // Represents: https://github.com/JiLiZART/BBob/blob/99c629e66678e40cec7b924eda2f1bfe0d46b941/packages/bbob-parser/src/lexer.ts#L104
+    /// Processes part of a tag and returns a `TagState` that should be used for the next iteration.
+    ///
+    /// Represents: https://github.com/JiLiZART/BBob/blob/99c629e66678e40cec7b924eda2f1bfe0d46b941/packages/bbob-parser/src/lexer.ts#L104
     TagState _nextTagState() {
       if (tagMode == TagState.ATTRIBUTE) {
          // Grab untill end, whitespace or end tag.
