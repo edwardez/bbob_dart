@@ -127,12 +127,15 @@ class Lexer {
   }
 
   /// Parses params inside [myTag---params goes here---]content[/myTag]
-  Attribute _parseAttrs(str) {
-    String? tagName;
-    bool skipSpecialChars = false;
+  Attribute _parseAttrs(String str) {
+    String? tagName = null;
+    var skipSpecialChars = false;
 
     final attrTokens = <Token>[];
+    final isSingleValueTag = !str.contains(space);
     final attrCharGrabber = CharGrabber(str);
+
+    var tagMode = TagState.NAME;
 
     bool validAttr(char) {
       final isEqual = char == equal;
@@ -157,32 +160,78 @@ class Lexer {
         }
       }
 
-      return !isEqual && !isWhiteSpace;
+      return !isWhiteSpace;
     }
 
-    void _nextAttr() {
-      final attrStr = attrCharGrabber.grabWhile(validAttr);
-      final currChar = attrCharGrabber.current;
+    /// Processes part of a tag and returns a `TagState` that should be used for the next iteration.
+    ///
+    /// Represents: https://github.com/JiLiZART/BBob/blob/99c629e66678e40cec7b924eda2f1bfe0d46b941/packages/bbob-parser/src/lexer.ts#L104
+    TagState _nextTagState() {
+      if (tagMode == TagState.ATTRIBUTE) {
+         // Grab untill end, whitespace or end tag.
+         final validAttrName = (String? char) => !(char == '=' || _isWhiteSpace(char));
+         final name = attrCharGrabber.grabWhile(validAttrName);
 
-      // first string before space is a tag name [tagName params...]
-      if (tagName == null) {
-        tagName = attrStr;
-      } else if (_isWhiteSpace(currChar) ||
-          currChar == doubleQuote ||
-          !attrCharGrabber.hasNext) {
+         final nextchar = attrCharGrabber.current;
+         final isEnd = attrCharGrabber.isLast;
+         final isValue = nextchar != equal;
+
+         attrCharGrabber.skip();
+
+         // Tag has ended already, this is a attribute value.
+         if (isEnd || isValue) {
+           final escaped = unquote(trimChar(name, doubleQuote));
+           attrTokens.add(Token(
+               TokenType.AttributeValue, escaped, _linePosition, _columnPosition));
+         } else {
+           // Definitely a name
+           attrTokens.add(Token(
+               TokenType.AttributeName, name, _linePosition, _columnPosition));
+         }
+
+         if (isEnd) {
+           return TagState.NAME;
+         }
+
+         if (isValue) {
+           return TagState.ATTRIBUTE;
+         }
+
+         return TagState.VALUE;
+      }
+
+      if (tagMode == TagState.VALUE) {
+        final attrStr = attrCharGrabber.grabWhile(validAttr);
+        attrCharGrabber.skip();
+
         final escaped = unquote(trimChar(attrStr, doubleQuote));
         attrTokens.add(Token(
             TokenType.AttributeValue, escaped, _linePosition, _columnPosition));
-      } else {
-        attrTokens.add(Token(
-            TokenType.AttributeName, attrStr, _linePosition, _columnPosition));
+
+        if (attrCharGrabber.isLast) return TagState.NAME;
+        return TagState.ATTRIBUTE;
       }
 
+      // Ideally this code should not be called twice since it will
+      // overwrite the tagName with (probably) some garbage. Could also throw an exception.
+      assert(tagName == null);
+
+      final validName = (String? char) => !(char == equal || _isWhiteSpace(char) || attrCharGrabber.isLast);
+      final name = attrCharGrabber.grabWhile(validName);
       attrCharGrabber.skip();
+
+      tagName = name;
+
+      if (isSingleValueTag) {
+        return TagState.VALUE;
+      }
+
+      final hasEq = str.contains(equal);
+      return hasEq ? TagState.ATTRIBUTE : TagState.VALUE;
     }
 
     while (attrCharGrabber.hasNext) {
-      _nextAttr();
+      tagMode = _nextTagState();
     }
 
     return Attribute(
@@ -287,4 +336,11 @@ class Attribute {
   final List<Token> attrs;
 
   const Attribute({required this.tag, required this.attrs});
+}
+
+/// Represents the current state of parsing a tag.
+enum TagState {
+  NAME,
+  VALUE,
+  ATTRIBUTE,
 }

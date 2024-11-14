@@ -136,6 +136,32 @@ void main() {
         validateTokens(tokens, output);
       });
 
+      test('url tag as param without quotes', () {
+        const input = '[url=http://site/]Text[/url]';
+        final tokens = tokenize(input);
+        const output = [
+          Token(TokenType.Tag, 'url', 0, 18),
+          Token(TokenType.AttributeValue, 'http://site/', 0, 18),
+          Token(TokenType.Word, 'Text', 0, 22),
+          Token(TokenType.Tag, '/url', 0, 28),
+        ];
+
+        validateTokens(tokens, output);
+      });
+
+      test('url tag as param without quotes and equals sign', () {
+        const input = '[url=http://site/?x=y]Text[/url]';
+        final tokens = tokenize(input);
+        const output = [
+          Token(TokenType.Tag, 'url', 0, 22),
+          Token(TokenType.AttributeValue, 'http://site/?x=y', 0, 22),
+          Token(TokenType.Word, 'Text', 0, 26),
+          Token(TokenType.Tag, '/url', 0, 32),
+        ];
+
+        validateTokens(tokens, output);
+      });
+
       test('tag with escaped quotemark param', () {
         const input = '[url text="Foo \\"Bar"]Text[/url]';
         final tokens = tokenize(input);
