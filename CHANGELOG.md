@@ -1,4 +1,4 @@
-## 0.2.2-dev1
+## 0.2.2-dev.1
 
 Fix a bug that equal signs cannot be parsed under certain circumstances.(
 Thanks [MartenM](https://github.com/edwardez/bbob_dart/pull/7)!)
