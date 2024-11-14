@@ -1,3 +1,8 @@
+## 0.2.2-dev1
+
+Fix a bug that equal signs cannot be parsed under certain circumstances.(
+Thanks [MartenM](https://github.com/edwardez/bbob_dart/pull/7)!)
+
 ## 0.2.1
 
 Stable null-safety release, no code change since 0.2.0-dev.1
